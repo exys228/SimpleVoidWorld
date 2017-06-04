@@ -5,10 +5,6 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
-		maven {
-            name = "Modmuss50"
-            url = "http://maven.modmuss50.me/"
-        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
@@ -21,23 +17,7 @@ apply plugin: 'maven-publish'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-
-repositories {
-    maven {
-        name = "Modmuss50"
-        url = "http://maven.modmuss50.me/"
-    }
-}
-
-
-repositories {
-    maven {
-        name = "Modmuss50"
-        url = "http://maven.modmuss50.me/"
-    }
-}
-
-version = "1.1.0"
+version = "1.1.2-fix"
 
 def ENV = System.getenv()
 if (ENV.BUILD_NUMBER) {
@@ -45,7 +25,7 @@ if (ENV.BUILD_NUMBER) {
 }
 
 minecraft {
-	version = "1.10.2-12.18.2.2121"
+	version = "1.11.2-13.20.0.2312"
 	mappings = "stable_29"
     replace "@MODVERSION@", project.version
     runDir = "run"
@@ -53,11 +33,6 @@ minecraft {
 }
 
 group = 'SimpleVoidWorld'
-
-
-dependencies {
-	deobfCompile 'RebornCore:RebornCore-1.10.2:+:universal'
-}
 
 processResources
         {

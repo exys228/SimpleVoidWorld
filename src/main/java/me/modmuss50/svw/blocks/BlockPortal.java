@@ -10,7 +10,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -19,40 +18,48 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.annotation.Nullable;
 
-/**
- * Created by modmuss50 on 01/12/16.
- */
-public class BlockPortal extends Block {
-	public BlockPortal() {
-		super(Material.PORTAL);
-		setCreativeTab(CreativeTabs.MISC);
-		setUnlocalizedName("simplevoidworld:portal");
-		setCreativeTab(SimpleVoidWorld.creativeTab);
-		setHardness(5.0F);
-		setResistance(2000.0F);
-		setSoundType(SoundType.STONE);
-	}
+public class BlockPortal extends Block
+{
+    private static final String prefix = ":";
 
-	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand,
-	                                @Nullable
-		                                ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!worldIn.isRemote && !playerIn.isSneaking()) {
-			if (worldIn.provider.getDimension() != Config.dimID) {
-				FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().transferPlayerToDimension((EntityPlayerMP) playerIn, Config.dimID, new WorldTeleporter(playerIn.getServer().worldServerForDimension(Config.dimID), pos));
-			} else {
-				FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().transferPlayerToDimension((EntityPlayerMP) playerIn, 0, new WorldTeleporter(playerIn.getServer().worldServerForDimension(0), pos));
-			}
-			return true;
-		}
-		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
-	}
+    public BlockPortal()
+    {
+        super(Material.PORTAL);
+        setCreativeTab(CreativeTabs.MISC);
+        String name = SimpleVoidWorld.MOD_ID + prefix + "portal";
+        setUnlocalizedName(name);
+        setRegistryName(name);
+        setHardness(5.0F);
+        setResistance(2000.0F);
+        setSoundType(SoundType.STONE);
+    }
 
-	@Override
-	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
-		if(worldIn.provider.getDimension() == Config.dimID){
-			return 1000F;
-		}
-		return super.getBlockHardness(blockState, worldIn, pos);
-	}
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable EnumFacing heldItem, float side, float hitX, float hitY)
+    {
+        if (!worldIn.isRemote && !playerIn.isSneaking())
+        {
+            if (worldIn.provider.getDimension() != Config.dimID)
+            {
+                FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().transferPlayerToDimension((EntityPlayerMP) playerIn, Config.dimID, new WorldTeleporter(playerIn.getServer().worldServerForDimension(Config.dimID), pos));
+            }
+            else
+            {
+                FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().transferPlayerToDimension((EntityPlayerMP) playerIn, 0, new WorldTeleporter(playerIn.getServer().worldServerForDimension(0), pos));
+            }
+            return true;
+        }
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY);
+    }
+
+    // TODO: Find another way to make portal block unbreakable in void world.
+    @Override
+    public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos)
+    {
+        if (worldIn.provider.getDimension() == Config.dimID)
+        {
+            return -1.0F;
+        }
+        return super.getBlockHardness(blockState, worldIn, pos);
+    }
 }
